@@ -6956,7 +6956,7 @@ var str = ρσ_str, repr = ρσ_repr;;
         var __name__ = "__main__";
 
 
-        var ROLL20_WHISPER_QUERY, ROLL20_ADVANTAGE_QUERY, ROLL20_INITIATIVE_ADVANTAGE_QUERY, ROLL20_TOLL_THE_DEAD_QUERY, chat, txt, btn, speakingas, settings;
+        var ROLL20_WHISPER_QUERY, ROLL20_ADVANTAGE_QUERY, ROLL20_INITIATIVE_ADVANTAGE_QUERY, ROLL20_TOLL_THE_DEAD_QUERY, ROLL20_COLOSSUS_SLAYER_QUERY, chat, txt, btn, speakingas, settings;
         var replaceRolls = ρσ_modules.utils.replaceRolls;
         var injectPageScript = ρσ_modules.utils.injectPageScript;
         var sendCustomEvent = ρσ_modules.utils.sendCustomEvent;
@@ -6977,6 +6977,7 @@ var str = ρσ_str, repr = ρσ_repr;;
         ROLL20_ADVANTAGE_QUERY = "{{{{query=1}}}} ?{{Advantage?|Normal Roll,&#123&#123normal=1&#125&#125|Advantage,&#123&#123advantage=1&#125&#125 &#123&#123r2={r2}&#125&#125|Disadvantage,&#123&#123disadvantage=1&#125&#125 &#123&#123r2={r2}&#125&#125|Super Advantage,&#123&#123advantage=1&#125&#125 &#123&#123r2={r2kh}&#125&#125|Super Disadvantage,&#123&#123disadvantage=1&#125&#125 &#123&#123r2={r2kl}&#125&#125}}";
         ROLL20_INITIATIVE_ADVANTAGE_QUERY = "?{Roll Initiative with advantage?|Normal Roll,1d20|Advantage,2d20kh1|Disadvantage,2d20kl1|Super Advantage,3d20kh1|Super Disadvantage,3d20kl1}";
         ROLL20_TOLL_THE_DEAD_QUERY = "?{Is the target missing any of its hit points?|Yes,d12|No,d8}";
+        ROLL20_COLOSSUS_SLAYER_QUERY = "?{Add Colossus Slayer damage?|No,0|Yes,d8}";
         chat = document.getElementById("textchat-input");
         txt = chat.getElementsByTagName("textarea")[0];
         btn = chat.getElementsByTagName("button")[0];
@@ -7625,7 +7626,7 @@ var str = ρσ_str, repr = ρσ_repr;;
             if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "custom_roll_dice")){
                 custom_roll_dice = ρσ_kwargs_obj.custom_roll_dice;
             }
-            var properties, template_type, dmg_props, d20_roll, damages, damage_types, crit_damages, crit_damage_types, dmg_template_crit, dmg_template, key;
+            var properties, template_type, dmg_props, d20_roll, damages, damage_types, crit_damages, crit_damage_types, cs_index, dmg_template_crit, dmg_template, key;
             properties = (function(){
                 var ρσ_d = {};
                 ρσ_d["charname"] = request.character.name;
@@ -7653,6 +7654,10 @@ var str = ρσ_str, repr = ρσ_repr;;
                 damage_types = list(request["damage-types"]);
                 crit_damages = list(request["critical-damages"]);
                 crit_damage_types = list(request["critical-damage-types"]);
+                cs_index = damage_types.indexOf("Colossus Slayer");
+                if ((cs_index !== -1 && (typeof cs_index !== "object" || ρσ_not_equals(cs_index, -1)))) {
+                    damages[(typeof cs_index === "number" && cs_index < 0) ? damages.length + cs_index : cs_index] = ROLL20_COLOSSUS_SLAYER_QUERY;
+                }
                 dmg_props = damagesToRollProperties(damages, damage_types, crit_damages, crit_damage_types);
             }
             if (ρσ_exists.n(request.range)) {
