@@ -7320,6 +7320,13 @@ var str = ρσ_str, repr = ρσ_repr;;
             __argnames__ : {value: ["request", "name", "properties"]}
         });
 
+        function rollAvatarDisplay(request) {
+            return "[x](" + request.character.avatar + "#.png)";
+        };
+        if (!rollAvatarDisplay.__argnames__) Object.defineProperties(rollAvatarDisplay, {
+            __argnames__ : {value: ["request"]}
+        });
+
         function rollSkill() {
             var request = ( 0 === arguments.length-1 && arguments[arguments.length-1] !== null && typeof arguments[arguments.length-1] === "object" && arguments[arguments.length-1] [ρσ_kwargs_symbol] === true) ? undefined : arguments[0];
             var custom_roll_dice = (arguments[1] === undefined || ( 1 === arguments.length-1 && arguments[arguments.length-1] !== null && typeof arguments[arguments.length-1] === "object" && arguments[arguments.length-1] [ρσ_kwargs_symbol] === true)) ? rollSkill.__defaults__.custom_roll_dice : arguments[1];
@@ -7976,6 +7983,8 @@ var str = ρσ_str, repr = ρσ_repr;;
                     roll = rollSpellCard(request);
                 } else if ((request.type === "spell-attack" || typeof request.type === "object" && ρσ_equals(request.type, "spell-attack"))) {
                     roll = rollSpellAttack(request, custom_roll_dice);
+                } else if ((request.type === "avatar" || typeof request.type === "object" && ρσ_equals(request.type, "avatar"))) {
+                    roll = rollAvatarDisplay(request);
                 } else {
                     mod = (ρσ_exists.n(request.modifier)) ? request.modifier : request.roll;
                     rname = (ρσ_exists.n(request.name)) ? request.name : request.type;
