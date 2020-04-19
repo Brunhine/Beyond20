@@ -115,6 +115,11 @@ def rollItem(force_display=False):
     item_name = $(".ct-item-pane .ct-sidebar__heading .ct-item-name,.ct-item-pane .ct-sidebar__heading .ddbc-item-name")[0].firstChild.textContent
     item_type = $(".ct-item-detail__intro").text()
     description = descriptionToString(".ct-item-detail__description")
+    if $(".ct-item-pane").find(".ct-simple-quantity__value input").length > 0:
+        quantity = int($(".ct-item-pane").find(".ct-simple-quantity__value input").val())
+        if (quantity > 0):
+            item_name += " (" + quantity + ")"
+
     if force_display is False and "Damage" in properties:
         item_full_name = $(".ct-item-pane .ct-sidebar__heading .ct-item-name,.ct-item-pane .ct-sidebar__heading .ddbc-item-name").text()
         to_hit = properties["To Hit"] ? \

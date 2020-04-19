@@ -2558,7 +2558,8 @@ function all(iterable) {
 if (!all.__argnames__) Object.defineProperties(all, {
     __argnames__ : {value: ["iterable"]}
 });
-var define_str_func, ρσ_unpack, ρσ_orig_split, ρσ_orig_replace;
+var decimal_sep, define_str_func, ρσ_unpack, ρσ_orig_split, ρσ_orig_replace;
+decimal_sep = 1.1.toLocaleString()[1];
 function ρσ_repr_js_builtin(x, as_array) {
     var ans, b, keys, key;
     ans = [];
@@ -2935,7 +2936,7 @@ define_str_func("format", function () {
                     value = value.toExponential(prec - 1);
                 }
                 value = value.replace(/0+$/g, "");
-                if (value[value.length-1] === ".") {
+                if (value[value.length-1] === decimal_sep) {
                     value = value.slice(0, -1);
                 }
                 if (ftype === "G") {
@@ -3751,7 +3752,9 @@ var str = ρσ_str, repr = ρσ_repr;;
             s.jsset.add("aside");
             s.jsset.add("audio");
             s.jsset.add("b");
+            s.jsset.add("base");
             s.jsset.add("big");
+            s.jsset.add("body");
             s.jsset.add("blockquote");
             s.jsset.add("br");
             s.jsset.add("button");
@@ -3790,6 +3793,7 @@ var str = ρσ_str, repr = ρσ_repr;;
             s.jsset.add("h5");
             s.jsset.add("h6");
             s.jsset.add("hr");
+            s.jsset.add("head");
             s.jsset.add("i");
             s.jsset.add("iframe");
             s.jsset.add("img");
@@ -4734,9 +4738,6 @@ var str = ρσ_str, repr = ρσ_repr;;
                             }
                             pos = close + 1;
                             continue;
-                        }
-                        if (extension === "<") {
-                            throw new SyntaxError("Look behind assertions are not supported in JavaScript");
                         }
                         if (extension === "(") {
                             throw new SyntaxError("Group existence assertions are not supported in JavaScript");
@@ -12257,13 +12258,19 @@ return this.__repr__();
             if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "force_display")){
                 force_display = ρσ_kwargs_obj.force_display;
             }
-            var prop_list, properties, item_name, item_type, description, item_full_name, to_hit, damages, damage_types, value, damage, damage_type, versatile_damage, versatile_choice, additional_damages, dmg, dmg_type, dmg_info, j, i, custom_damages, parts, custom_damage, sneak_attack, barbarian_level, rage_damage, bloodhunter_level, rite_die, cleric_level, bard_level, critical_limit, brutal, roll_properties;
+            var prop_list, properties, item_name, item_type, description, quantity, item_full_name, to_hit, damages, damage_types, value, damage, damage_type, versatile_damage, versatile_choice, additional_damages, dmg, dmg_type, dmg_info, j, i, custom_damages, parts, custom_damage, sneak_attack, barbarian_level, rage_damage, bloodhunter_level, rite_die, cleric_level, bard_level, critical_limit, brutal, roll_properties;
             prop_list = $(".ct-item-pane .ct-property-list .ct-property-list__property,.ct-item-pane .ddbc-property-list .ddbc-property-list__property");
             properties = propertyListToDict(prop_list);
             properties["Properties"] = properties["Properties"] || "";
             item_name = $(".ct-item-pane .ct-sidebar__heading .ct-item-name,.ct-item-pane .ct-sidebar__heading .ddbc-item-name")[0].firstChild.textContent;
             item_type = $(".ct-item-detail__intro").text();
             description = descriptionToString(".ct-item-detail__description");
+            if ($(".ct-item-pane").find(".ct-simple-quantity__value input").length > 0) {
+                quantity = int($(".ct-item-pane").find(".ct-simple-quantity__value input").val());
+                if (quantity > 0) {
+                    item_name += " (" + quantity + ")";
+                }
+            }
             if (force_display === false && ρσ_in("Damage", properties)) {
                 item_full_name = $(".ct-item-pane .ct-sidebar__heading .ct-item-name,.ct-item-pane .ct-sidebar__heading .ddbc-item-name").text();
                 to_hit = ρσ_exists.e(properties["To Hit"], findToHit(item_full_name, ".ct-combat-attack--item,.ddbc-combat-attack--item", ".ct-item-name,.ddbc-item-name", ".ct-combat-attack__tohit,.ddbc-combat-attack__tohit"));
